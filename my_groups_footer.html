@@ -1,0 +1,21 @@
+<script>
+    var all_popups = $('.popup');
+    var open_btns = $('.more_info');
+    var close_btns = $('.close');
+    var open_btns_array = $(open_btns).toArray();
+    var close_btns_array = $(close_btns).toArray();
+
+    open_btns_array.forEach(element => {
+        $(element).click(function() {
+            index = open_btns_array.indexOf(element);
+            $(all_popups[index]).show();
+        });
+    });
+
+    close_btns_array.forEach(element => {
+        $(element).click(function() {
+            index = close_btns_array.indexOf(element);
+            $(all_popups[index]).hide();
+        });
+    });
+</script>

@@ -6,7 +6,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-        <!-- <link rel="stylesheet" type="text/css" href="index.css"> -->
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -48,7 +47,7 @@
                 margin-top: 0;
             }
 
-            #signup {
+            #login {
                 text-align: left;
                 background-color: white;
                 padding: 30px;
@@ -61,7 +60,7 @@
                 font-size: 25px;
                 border: 2px solid var(--orange1);
                 border-radius: 5px;
-                width: 60%;
+                width: 75%;
             }
 
             input[type="submit"] {
@@ -96,22 +95,19 @@
     </head>
     <body>
         <div id="form_holder">
-            <h1>Sign Up</h1>
+            <h1>Login</h1>
             <div id="error_div"></div>
-            <form id="signup" method="get">
-                <label for="username">Create Username:&nbsp;&nbsp;&nbsp;</label><input type="text" name="username" id="username">
+            <form id="login" method="get">
+                <label for="username">Username:&nbsp;&nbsp;&nbsp;</label><input type="text" name="username" id="username">
                 <br>
                 <br>
-                <label for="password1">Create Password:&nbsp;&nbsp;&nbsp;&nbsp;</label><input type="password" name="password1" id="password1">
+                <label for="password">Password:&nbsp;&nbsp;&nbsp;&nbsp;</label><input type="password" name="password" id="password">
                 <br>
                 <br>
-                <label for="password2">Confirm Password:&nbsp;</label><input type="password" name="password2" id="password2">
+                <input type="submit" value="Login">
                 <br>
                 <br>
-                <input type="submit" value="Create Account">
-                <br>
-                <br>
-                <a href="./login" style="font-size: 20px">Already have an account?</a>
+                <a href="./sign-up" style="font-size: 20px">Don't have an account?</a>
             </form>
         </div>
 
@@ -119,9 +115,9 @@
             // fixes caching issue
             random_num = Math.floor(Math.random() * 10000);
             action = 'new_account?rand=' + random_num;
-            $("#signup").attr("action", action);
+            $("#login").attr("action", action);
 
-            $('#signup').on('submit', function(e) {
+            $('#login').on('submit', function(e) {
                 e.preventDefault();
                 var check_validation = validate();
                 if (check_validation) {
@@ -131,7 +127,6 @@
 
             error_div = $('#error_div');
             no_input_err = 'Please enter a username and password';
-            pass_err = 'Passwords do not match';
 
             function validate() {
                 var errors = [];
@@ -139,24 +134,14 @@
 
                 valid = true;
 
-                email = $('input[type="text"]');
-                if ($(email[0]).val() == '') {
-                    errors.push(no_input_err);
-                    show_errors(errors);
-                    return false;
-                }
-
-                passwords = $('input[type="password"]');
-                if ($(passwords[1]).val() == '' || $(passwords[2]).val() == '') {
-                    errors.push(no_input_err);
-                    show_errors(errors);
-                    return false;
-                }
-
-                if ($(passwords[1]).val() != $(passwords[2]).val()) {
-                    errors.push(pass_err);
-                    show_errors(errors);
-                    return false;
+                inputs = $('input[type="text"]');
+                for (var i = 0; i < inputs.length; i++) {
+                    if ($(inputs[i]).val() == '') {
+                        valid = false;
+                        errors.push(no_input_err);
+                        show_errors(errors);
+                        return valid;
+                    }
                 }
 
                 return valid;
