@@ -1,5 +1,5 @@
 {
-    "name": "College Ball",
+    "name": "collegeball",
     "version": "1.0.0",
     "description": "College Ball wesbite",
     "main": "main.js",
@@ -16,4 +16,4 @@
         "url": ""
     },
     "homepage": ""
-  }
+}
