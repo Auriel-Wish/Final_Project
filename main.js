@@ -14,9 +14,11 @@ var day_map = {
     6:'Sat'
 }
 
+var port = process.env.PORT || 3000;
 client = new MongoClient(uri, {useUnifiedTopology: true});
 http.createServer(async function (req, res) {
     res.writeHead(200, {'Content-Type': 'text/html'});
+    var random_num = Math.floor(Math.random() * 1000000);
     path_name = url.parse(req.url, true).pathname;
     if (path_name == '/') {
         var file = fs.readFileSync('./header.html');
@@ -51,7 +53,7 @@ http.createServer(async function (req, res) {
             var file = fs.readFileSync('./body1.html');
             res.write(file);
 
-            res.write('<a href="./my_groups_' + user_id + '"><div class="hover_orange" style="margin-left: 50px; display: inline-block">View My Groups</div></a><a href="./create_group_' + user_id + '"><div class="hover_orange" style="margin-left: 50px; display: inline-block">Create Group</div></a>');
+            res.write('<a href="./my_groups_' + user_id + '"><div class="hover_orange" style="margin-left: 50px; display: inline-block">View My Groups</div></a><a href="./create_group_' + user_id + '"><div class="hover_orange" style="margin-left: 50px; display: inline-block">Create Group</div></a><a href="./change_plan-' + user_id + '"><div class="hover_orange" style="margin-left: 50px; display: inline-block">Change Plan</div></a>');
 
             file = fs.readFileSync('./body2.html');
             res.write(file);
@@ -98,7 +100,7 @@ http.createServer(async function (req, res) {
                         break;
                     }
                 }
-                random_num = Math.floor(Math.random() * 10000);
+                
                 if (in_group) {
                     total_str += '<a href="./leave_group-' + i + '-' + user_id + '?rand=' + random_num + '" class="leave_group">Leave Group</a>';
                 }
@@ -121,26 +123,52 @@ http.createServer(async function (req, res) {
     else if (path_name.includes('create_group')) {
         await client.connect();
         var dbo = client.db('pickup_sports');
-        
-        var file = fs.readFileSync('./new_group_top.html');
-        res.write(file);
-
+        var users_coll = dbo.collection('users');
         var user_id = path_name.split('_')[2];
-        res.write('<div style="text-align: center"><a id="return" href="./user_' + user_id + '">Return Home</a></div><div id="form_holder"><div id="error_div">Please fill out all fields</div><form method="get" action="./group_created_' + user_id + '_" onsubmit="return validate()">');
+        var mongo_id = new mongo.ObjectID(user_id);
         
-        file = fs.readFileSync('./new_group_middle.html');
-        res.write(file);
-        var sports_coll = dbo.collection('sports_list');
-        var sports_list = await sports_coll.find({}).toArray();
-        res.write('<label for="sport">Sport: </label><select name="sport" id="sport"><option value="Select Sport">Select Sport</option>');
-        for (var i = 0; i < sports_list.length; i++) {
-            res.write('<option value="' + sports_list[i].name + '">' + sports_list[i].name + '</option>');
-        }
-        res.write('</select>')
+        var curr_user = await users_coll.findOne({_id:mongo_id});
+        var num_plans = (curr_user.groups).length
+        var plan = curr_user.plan
+        var max_plans = 0
 
-        file = fs.readFileSync('./new_group_bottom.html');
-        res.write(file);
-        res.write('</body></html>')
+        if (plan == 'standard') {
+            max_plans = 3;
+        }
+        else if (plan == 'silver') {
+            max_plans = 5;
+        }
+        else if (plan == 'platinum') {
+            max_plans = -1;
+        }
+        
+        if (max_plans == -1 || (num_plans < max_plans && max_plans >= 0)) {
+            var file = fs.readFileSync('./new_group_top.html');
+            res.write(file);
+
+            res.write('<div style="text-align: center"><a id="return" href="./user_' + user_id + '">Return Home</a></div><div id="form_holder"><div id="error_div">Please fill out all fields</div><form method="get" action="./group_created_' + user_id + '_" onsubmit="return validate()">');
+            
+            file = fs.readFileSync('./new_group_middle.html');
+            res.write(file);
+            var sports_coll = dbo.collection('sports_list');
+            var sports_list = await sports_coll.find({}).toArray();
+            res.write('<label for="sport">Sport: </label><select name="sport" id="sport"><option value="Select Sport">Select Sport</option>');
+            for (var i = 0; i < sports_list.length; i++) {
+                res.write('<option value="' + sports_list[i].name + '">' + sports_list[i].name + '</option>');
+            }
+            res.write('</select>')
+
+            file = fs.readFileSync('./new_group_bottom.html');
+            res.write(file);
+            res.write('</body></html>')
+        }
+        else {
+            var redirect = ('./exceeded_group_limit-' + user_id);
+            res.writeHead(301, {
+                Location: redirect
+            }).end();
+        }
+
         client.close();
     }
     else if (path_name.includes('group_created')) {
@@ -182,12 +210,17 @@ http.createServer(async function (req, res) {
         var university = qobj.university;
         var sport = qobj.sport;
 
-        new_group = {'name':name, 'about':about, 'location':location, 'skill':skill, 'university':university, 'sport':sport, 'members':[mongo_id], 'days':[sun, mon, tue, wed, thu, fri, sat]};
+        var new_group = {name:name, about:about, location:location, skill:skill, university:university, sport:sport, members:[mongo_id], days:[sun, mon, tue, wed, thu, fri, sat]};
         await client.connect();
         var dbo = client.db('pickup_sports');
-        var sports_coll = dbo.collection('groups');
+        var groups_coll = dbo.collection('groups');
+        var users_coll = dbo.collection('users');
 
-        await sports_coll.insertOne(new_group);
+        await groups_coll.insertOne(new_group);
+        var result = await groups_coll.findOne({name:name, about:about, location:location, skill:skill, university:university, sport:sport, members:[mongo_id], days:[sun, mon, tue, wed, thu, fri, sat]});
+        var group_id = result._id;
+        group_id = new mongo.ObjectID(group_id);
+        await users_coll.updateOne({_id:mongo_id}, {$push: {groups:group_id}});
 
         var redirect = ('./user_' + user_id);
         res.writeHead(301, {
@@ -268,7 +301,7 @@ http.createServer(async function (req, res) {
                     break;
                 }
             }
-            random_num = Math.floor(Math.random() * 10000);
+            
             total_str += '<a href="./leave_group-' + i + '-' + user_id + '?rand=' + random_num + '" class="leave_group">Leave Group</a>';
             
             total_str += '</div></div>';
@@ -289,18 +322,48 @@ http.createServer(async function (req, res) {
         var group_num = parseInt(path_name.split('-')[1]);
         var user_id = path_name.split('-')[2];
         var mongo_id = new mongo.ObjectID(user_id);
+        var curr_user = await users_coll.findOne({_id:mongo_id});
+        var num_plans = (curr_user.groups).length
+        var plan = curr_user.plan
+        var max_plans = 0
 
-        var all_groups = await groups_coll.find({}).toArray();
-        var group_id = all_groups[group_num]._id;
-        group_id = new mongo.ObjectID(group_id);
-        await groups_coll.updateOne({_id:group_id}, {$push: {members:mongo_id}});
-        await users_coll.updateOne({_id:mongo_id}, {$push: {groups:group_id}});
+        if (plan == 'standard') {
+            max_plans = 3;
+        }
+        else if (plan == 'silver') {
+            max_plans = 5;
+        }
+        else if (plan == 'platinum') {
+            max_plans = -1;
+        }
 
-        var redirect = ('./user_' + user_id);
-        res.writeHead(301, {
-            Location: redirect
-        }).end();
+        if (max_plans == -1 || (num_plans < max_plans && max_plans >= 0)) {
+            var all_groups = await groups_coll.find({}).toArray();
+            var group_id = all_groups[group_num]._id;
+            group_id = new mongo.ObjectID(group_id);
+            await groups_coll.updateOne({_id:group_id}, {$push: {members:mongo_id}});
+            await users_coll.updateOne({_id:mongo_id}, {$push: {groups:group_id}});
+
+            var redirect = ('./user_' + user_id);
+            res.writeHead(301, {
+                Location: redirect
+            }).end();
+        }
+        else {
+            var redirect = ('./exceeded_group_limit-' + user_id);
+            res.writeHead(301, {
+                Location: redirect
+            }).end();
+        }
         client.close();
+    }
+    else if (path_name.includes('exceeded_group_limit')) {
+        var user_id = path_name.split('-')[1];
+
+        var file = fs.readFileSync('./exceeded_group_limit.html');
+        res.write(file);
+
+        res.write('<h2>Your plan does not allow you to sign up for another group: <a href="./change_plan-' + user_id + '">Upgrade Plan</a> OR <a href="./user_' + user_id + '">Return Home</a></h2></body></html>')
     }
     else if (path_name.includes('leave_group')) {
         await client.connect();
@@ -328,6 +391,33 @@ http.createServer(async function (req, res) {
         var file = fs.readFileSync('./sign-up.html');
         res.write(file);
     }
+    else if (path_name.includes('change_plan')) {
+        var file = fs.readFileSync('./change_plan_top.html');
+        res.write(file);
+        
+        var user_id = path_name.split('-')[1];
+
+        await client.connect();
+        var dbo = client.db('pickup_sports');
+        var users_coll = dbo.collection('users');
+
+        var user_str = '<input type="hidden" name="user_id" id="user_id" value="' + user_id + '">';
+
+        file = fs.readFileSync('./plan1.html');
+        res.write(file);
+        res.write(user_str);
+
+        file = fs.readFileSync('./plan2.html');
+        res.write(file);
+        res.write(user_str);
+
+        file = fs.readFileSync('./plan3.html');
+        res.write(file);
+        res.write(user_str);
+
+        file = fs.readFileSync('./new_account_success_bottom.html');
+        res.write(file);
+    }
     else if (path_name == '/new_account') {
         var qobj = url.parse(req.url, true).query;
         var user = qobj.username;
@@ -337,12 +427,14 @@ http.createServer(async function (req, res) {
         var dbo = client.db('pickup_sports');
         var users_coll = dbo.collection('users');
 
-        const result = await users_coll.findOne({username:user});
+        var result = await users_coll.findOne({username:user});
         if (result == null) {
             await users_coll.insertOne({username:user, password:password, plan:'none', groups:[]});
+            var user_id = await users_coll.findOne({username:user});
+            user_id = user_id._id;
             var file = fs.readFileSync('./new_account_success_top.html');
             res.write(file);
-            user_str = '<input type="hidden" name="user" id="user" value="' + user + '">';
+            user_str = '<input type="hidden" name="user_id" id="user_id" value="' + user_id + '">';
 
             file = fs.readFileSync('./plan1.html');
             res.write(file);
@@ -367,18 +459,16 @@ http.createServer(async function (req, res) {
     }
     else if (path_name == '/new_plan') {
         var qobj = url.parse(req.url, true).query;
-        var user = qobj.user;
+        var user_id = qobj.user_id;
+        var mongo_id = new mongo.ObjectID(user_id);
         var plan = qobj.plan;
         
         await client.connect();
         var dbo = client.db('pickup_sports');
         var users_coll = dbo.collection('users');
 
-        await users_coll.updateOne({username:user}, {$set: {plan: plan}});
+        await users_coll.updateOne({_id:mongo_id}, {$set: {plan: plan}});
 
-        var user_id = await users_coll.findOne({username:user});
-        user_id = user_id._id;
-        
         var redirect = ('./user_' + user_id);
         res.writeHead(301, {
             Location: redirect
@@ -400,6 +490,7 @@ http.createServer(async function (req, res) {
 
         const result = await users_coll.findOne({username:user, password:password});
         if (result == null) {
+            console.log('In')
             var file = fs.readFileSync('./login_fail.html');
             res.write(file);
         }
@@ -418,4 +509,4 @@ http.createServer(async function (req, res) {
         res.write(file);
     }
     res.end();
-}).listen(8080);
+}).listen(port);
