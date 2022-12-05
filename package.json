@@ -1,6 +1,6 @@
 {
     "name": "collegeball",
-    "version": "1.0.0",
+    "version": "18.12.1",
     "description": "College Ball wesbite",
     "main": "index.js",
     "scripts": {
