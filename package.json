@@ -2,9 +2,9 @@
     "name": "collegeball",
     "version": "1.0.0",
     "description": "College Ball wesbite",
-    "main": "/app/index.js",
+    "main": "index.js",
     "scripts": {
-        "start": "node /app/index.js"
+        "start": "node index.js"
     },
     "repository": {
         "type": "git",
