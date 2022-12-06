@@ -504,9 +504,9 @@ http.createServer(async function (req, res) {
         }
         client.close();
     }
-    else {
-        var file = fs.readFileSync('./error.html');
-        res.write(file);
-    }
+    // else {
+    //     var file = fs.readFileSync('./error.html');
+    //     res.write(file);
+    // }
     res.end();
 }).listen(port);
