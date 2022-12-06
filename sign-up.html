@@ -118,7 +118,7 @@
         <script>
             // fixes caching issue
             random_num = Math.floor(Math.random() * 10000);
-            action = 'new_account?rand=' + random_num;
+            action = './new_account?rand=' + random_num;
             $("#signup").attr("action", action);
 
             $('#signup').on('submit', function(e) {
@@ -147,13 +147,13 @@
                 }
 
                 passwords = $('input[type="password"]');
-                if ($(passwords[1]).val() == '' || $(passwords[2]).val() == '') {
+                if ($(passwords[0]).val() == '' || $(passwords[1]).val() == '') {
                     errors.push(no_input_err);
                     show_errors(errors);
                     return false;
                 }
 
-                if ($(passwords[1]).val() != $(passwords[2]).val()) {
+                if ($(passwords[0]).val() != $(passwords[1]).val()) {
                     errors.push(pass_err);
                     show_errors(errors);
                     return false;
