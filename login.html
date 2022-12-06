@@ -114,7 +114,7 @@
         <script>
             // fixes caching issue
             random_num = Math.floor(Math.random() * 10000);
-            action = 'new_account?rand=' + random_num;
+            action = './check_login?rand=' + random_num;
             $("#login").attr("action", action);
 
             $('#login').on('submit', function(e) {

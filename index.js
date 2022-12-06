@@ -479,7 +479,7 @@ http.createServer(async function (req, res) {
         var file = fs.readFileSync('./login.html');
         res.write(file);
     }
-    else if (path_name == '/check_login') {
+    else if (path_name.includes('check_login')) {
         var qobj = url.parse(req.url, true).query;
         var user = qobj.username;
         var password = qobj.password;
