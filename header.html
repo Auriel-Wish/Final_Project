@@ -59,6 +59,12 @@
                 margin: 0 20px;
             }
 
+            #intro h2 {
+                font-size: 40px;
+                margin-top: 20px;
+                margin-bottom: 100px;
+            }
+
             a {
                 font-size: 40px;
                 padding: 20px;
@@ -72,11 +78,37 @@
             a:hover {
                 background-color: var(--orange2);
             }
+
+            @media only screen and (max-width: 900px) {
+                #intro h1, td{
+                        font-size: 70px;
+                }
+                #intro h2, td {
+                        font-size: 30px;
+                        margin-top: 15px;
+                        margin-bottom: 75px;
+                }
+                #intro h3, td {
+                        font-size: 20px;
+                }
+            }
+            @media only screen and (max-width: 600px) {
+                #intro h1, td {
+                        font-size: 60px;
+                        margin: 0 10px;
+                }
+                #intro h2, td {
+                        margin-top: 20px;
+                }
+                #intro h3, td {
+                        margin-top: 30px;
+                }
+            }
         </style>
     </head>
     <body>
         <table id="intro" cellpadding="0" cellspacing="0">
-            <tr style="height: 60%"><td><h1 style="text-transform: uppercase;">College Ball</h1><br><h2 style="font-size: 40px; margin-top: 20px; margin-bottom: 100px">Pickup Sports Made Easy</h2><h3>Available in: NJ, NY, CT, MA</h3><hr style="border: 1px solid white; margin: 30px auto 0 auto; width: 30%; background-color: white;"></td></tr>
+            <tr style="height: 60%" style="width: 80%"><td><h1 style="text-transform: uppercase;">College Ball</h1><br><h2>Pickup Sports Made Easy</h2><h3>Available in: NJ, NY, CT, MA</h3><hr style="border: 1px solid white; margin: 30px auto 0 auto; width: 30%; background-color: white;"></td></tr>
             <tr style="height: 40%"><td><a href="./sign-up">Sign Up</a><a href="./login">Log In</a></td></tr>
         </table>
     </body>

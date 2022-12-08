@@ -53,7 +53,7 @@ http.createServer(async function (req, res) {
             var file = fs.readFileSync('./body1.html');
             res.write(file);
 
-            res.write('<a href="./my_groups_' + user_id + '"><div class="hover_orange" style="margin-left: 50px; display: inline-block">View My Groups</div></a><a href="./create_group_' + user_id + '"><div class="hover_orange" style="margin-left: 50px; display: inline-block">Create Group</div></a><a href="./change_plan-' + user_id + '"><div class="hover_orange" style="margin-left: 50px; display: inline-block">Change Plan</div></a>');
+            res.write('<a href="./my_groups_' + user_id + '"><div class="hover_orange user_links" id="groups"><p>View My Groups</p></div></a><a href="./create_group_' + user_id + '"><div class="hover_orange user_links" id="create"><p>Create Group</p></div></a><a href="./change_plan-' + user_id + '"><div class="hover_orange user_links" id="plan"><p>Change Plan</p></div></a>');
 
             file = fs.readFileSync('./body2.html');
             res.write(file);
@@ -255,7 +255,7 @@ http.createServer(async function (req, res) {
         var user_id = path_name.split('_')[2];
         var mongo_id = new mongo.ObjectID(user_id);
 
-        res.write('<div style="text-align: center;"><div style="display: inline-block;"><a href="./user_' + user_id + '">Find More Groups</a></div><div style="margin-left: 50px; display: inline-block"><a href="./create_group_' + user_id + '">Create Group</a></div></div>');
+        res.write('<div class="group_links" style="text-align: center;"><div class="group_links" style="display: inline-block;"><a href="./user_' + user_id + '">Find More Groups</a></div><div class="group_links" style="margin-left: 50px; display: inline-block"><a href="./create_group_' + user_id + '">Create Group</a></div></div>');
 
         await client.connect();
         var dbo = client.db('pickup_sports');
@@ -504,9 +504,9 @@ http.createServer(async function (req, res) {
         }
         client.close();
     }
-    // else {
-    //     var file = fs.readFileSync('./error.html');
-    //     res.write(file);
-    // }
+    else {
+        var file = fs.readFileSync('./error.html');
+        res.write(file);
+    }
     res.end();
 }).listen(port);

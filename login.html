@@ -91,6 +91,23 @@
             a:hover {
                 color: var(--orange2);
             }
+            #account {
+                font-size: 20px;
+            }
+            @media only screen and (max-width: 800px) {
+                #login label {
+                        font-size: 18px;
+                }
+                input[type="text"], input[type="password"] {
+                        width: 80%;
+                }
+                input[type="submit"] {
+                        font-size: 18px;
+                }
+                #account {
+                        font-size: 15px;
+                }
+            }
         </style>
     </head>
     <body>
@@ -107,7 +124,7 @@
                 <input type="submit" value="Login">
                 <br>
                 <br>
-                <a href="./sign-up" style="font-size: 20px">Don't have an account?</a>
+                <a href="./sign-up" id="account">Don't have an account?</a>
             </form>
         </div>
 

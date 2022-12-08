@@ -204,7 +204,22 @@
                 color: var(--orange2);
                 border-color: var(--orange2);
             }
+            @media only screen and (max-width: 800px) {
+                .group_links {
+                        padding: 30px;                         
+                }
+                .popup-content{
+                        width: max-content;
+                }
+                .group_header {
+                        font-size: 50px;
+                }
+                .leave_group {
+                        font-size: 17px;
+                }
+                
+            }
         </style>
     </head>
     <body>
-        <h1>Your Groups</h1>
+        <h1 class="group_header">Your Groups</h1>

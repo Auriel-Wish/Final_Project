@@ -62,7 +62,7 @@
 
             #intro {
                 width: 100%;
-                height: 100vh;
+                height: 100%;
                 background: url("images/intro.jpg");
                 background-position: center;
                 background-repeat: no-repeat;
@@ -243,10 +243,83 @@
                 color: var(--orange2);
                 cursor: pointer;
             }
+            #intro h2 {
+                font-size: 40px; 
+                text-transform: uppercase;
+            }
+            .user_links {
+                display: inline-block;   
+            }
+            #groups {
+                margin-left: 50px; 
+            }
+            #create {
+                margin-left: 50px;
+            }
+            #plan {
+                margin-left: 50px;
+            }
+            @media only screen and (max-width: 1150px) {
+                #intro h1, td {
+                        font-size: 70px;
+                        padding: 20px;
+                }
+                #intro h2, td {
+                        font-size: 30px;
+                        margin-bottom: 5px;
+                }
+                #intro, tr, td {
+                        display: block;
+                        margin-left: auto;
+                        margin-right: auto;
+                        margin-bottom: 30px;
+                }
+                .user_links {
+                        display: block;
+                        margin-left: auto;
+                        margin-right: auto;
+                }
+                #groups {
+                        margin-bottom: 20px;
+                        margin-top: 20px;
+                }
+                .user_links p{
+                        font-size: 18px;
+                }
+            }
+            @media only screen and (max-width: 700px) {
+                #intro h1 {
+                        font-size: 50px;
+                        margin-top: 100px;
+                }
+                #intro h2 {
+                        font-size: 20px;
+                        margin-top: -50px;
+                }
+                .user_links p{
+                        font-size: 15px;
+                        
+                }
+                #create {
+                        margin-left: 15px;
+                }
+                .filter_class{  
+                        display: block;
+                        margin-bottom: 10px;   
+                }
+                .filter_class, input[type="select"] {
+                        margin-left: auto;
+                        margin-right: auto;
+                        margin-top: 10px;
+                }
+                .leave_group {
+                        font-size: 15px;
+                }
+            }
         </style>
 </head>
 <body>        
         <a href="./" class="hover_orange" style="padding: 15px; border-radius: 5px; position: absolute; top: 30px; left: 30px; z-index: 3;">Logout</a>
     
         <table id="intro">
-            <tr><td><h1>Pickup Sports</h1><br><h2 style="font-size: 40px; text-transform: uppercase">Available in: NJ, NY, CT, MA</h3><hr style="border: 1px solid white; margin: 50px auto 100px auto; width: 30%; background-color: white;"><a href="#filter"><div class="hover_orange" style="display: inline-block">Find a Pickup Group</div></a>
+            <tr><td><h1>Pickup Sports</h1><br><h2>Available in: NJ, NY, CT, MA</h3><hr style="border: 1px solid white; margin: 50px auto 100px auto; width: 30%; background-color: white;"><a href="#filter"><div class="hover_orange user_links"><p>Find a Pickup Group</p></div></a>
