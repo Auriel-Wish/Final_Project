@@ -12,7 +12,25 @@ var day_map = {
     4:'Thu',
     5:'Fri',
     6:'Sat'
-}
+};
+var image_url = "https://aurielw.sgedu.site/Final_Pics/";
+var sports_images = {
+    'volleyball': image_url + "volleyball.jpeg",
+    'football': image_url + "football.jpeg",
+    'ice hockey': image_url + "hockey.jpeg",
+    'field hockey': image_url + "field_hockey.webp",
+    'tennis': image_url + "tennis.jpeg",
+    'soccer': image_url + "soccer.jpeg",
+    'ultimate frisbee': image_url + "frisbee.jpeg",
+    'spikeball': image_url + "spikeball.jpeg",
+    'basketball': image_url + "basketball.jpeg",
+    'chess': image_url + "chess.jpeg",
+    'baseball': image_url + "baseball.jpeg",
+    'lacrosse': image_url + "lacrosse.jpeg",
+    'cards': image_url + "cards.jpeg",
+    'sky diving': image_url + "sky_diving.webp",
+    'default': image_url + "default.jpeg"
+};
 
 var port = process.env.PORT || 3000;
 client = new MongoClient(uri, {useUnifiedTopology: true});
@@ -73,6 +91,15 @@ http.createServer(async function (req, res) {
             var all_groups = await groups_coll.find({}).toArray();
             var total_str = '';
             for (var i = 0; i < all_groups.length; i++) {
+                var img_link = '';
+                var curr_sport = (all_groups[i].sport).toLowerCase();
+                if (!(curr_sport in sports_images)) {
+                    img_link = sports_images['default'];
+                }
+                else {
+                    img_link = sports_images[curr_sport];
+                }
+                
                 total_str = '<table class="group" cellspacing="0" cellpadding="0" data-university="' + all_groups[i].university + '" data-sport="' + all_groups[i].sport + '" data-days=\'[';
                 for (var j = 0; j < all_groups[i].days.length; j++) {
                     if (all_groups[i].days[j] != '-1') {
@@ -82,7 +109,7 @@ http.createServer(async function (req, res) {
                 total_str = total_str.slice(0, -1);
                 total_str += ']\'';
 
-                total_str += '><tr><td class="sport_description"><h2 class="group_name">' + all_groups[i].name + '</h2><p class="about_group">' + all_groups[i].about + '</p><div class="more_info">More Information</div></td><td class="sport_pic"><img src="images/intro.jpg"></td></tr></table><div class="popup"><div class="popup-content"><div class="close"><i class="fa-solid fa-x"></i></div><h2 class="group_name">' + all_groups[i].name + '</h2><p class="about_group">' + all_groups[i].about + '</p><p class="group_university"><strong>University:</strong> ' + all_groups[i].university + '</p><p class="meeting_location"><strong>Location:</strong> ' + all_groups[i].location + '</p><p class="meeting_times"><strong>Time:</strong> '
+                total_str += '><tr><td class="sport_description"><h2 class="group_name">' + all_groups[i].name + '</h2><p class="group_sport"><strong>Sport:</strong> ' + all_groups[i].sport + '</p><p class="about_group">' + all_groups[i].about + '</p><div class="more_info">More Information</div></td><td class="sport_pic"><img src="images/intro.jpg"></td></tr></table><div class="popup"><div class="popup-content"><div class="close"><i class="fa-solid fa-x"></i></div><h2 class="group_name">' + all_groups[i].name + '</h2><p class="group_sport"><strong>Sport:</strong> ' + all_groups[i].sport + '</p><p class="about_group">' + all_groups[i].about + '</p><p class="group_university"><strong>University:</strong> ' + all_groups[i].university + '</p><p class="meeting_location"><strong>Location:</strong> ' + all_groups[i].location + '</p><p class="meeting_times"><strong>Time:</strong> '
                 for (var j = 0; j < all_groups[i].days.length; j++) {
                     if (all_groups[i].days[j] != '-1') {
                         total_str += all_groups[i].days[j] + ' ' + day_map[j] + ', ';
@@ -274,6 +301,15 @@ http.createServer(async function (req, res) {
 
         var total_str = '';
         for (var i = 0; i < all_groups.length; i++) {
+            var img_link = '';
+            var curr_sport = (all_groups[i].sport).toLowerCase();
+            if (!(curr_sport in sports_images)) {
+                img_link = sports_images['default'];
+            }
+            else {
+                img_link = sports_images[curr_sport];
+            }
+            
             total_str = '<table class="group" cellspacing="0" cellpadding="0" data-university="' + all_groups[i].university + '" data-sport="' + all_groups[i].sport + '" data-days=\'[';
             for (var j = 0; j < all_groups[i].days.length; j++) {
                 if (all_groups[i].days[j] != '-1') {
@@ -283,7 +319,7 @@ http.createServer(async function (req, res) {
             total_str = total_str.slice(0, -1);
             total_str += ']\'';
 
-            total_str += '><tr><td class="sport_description"><h2 class="group_name">' + all_groups[i].name + '</h2><p class="about_group">' + all_groups[i].about + '</p><div class="more_info">More Information</div></td><td class="sport_pic"><img src="images/intro.jpg"></td></tr></table><div class="popup"><div class="popup-content"><div class="close"><i class="fa-solid fa-x"></i></div><h2 class="group_name">' + all_groups[i].name + '</h2><p class="about_group">' + all_groups[i].about + '</p><p class="group_university"><strong>University:</strong> ' + all_groups[i].university + '</p><p class="meeting_location"><strong>Location:</strong> ' + all_groups[i].location + '</p><p class="meeting_times"><strong>Time:</strong> '
+            total_str += '><tr><td class="sport_description"><h2 class="group_name">' + all_groups[i].name + '</h2><p class="group_sport"><strong>Sport:</strong> ' + all_groups[i].sport + '</p><p class="about_group">' + all_groups[i].about + '</p><div class="more_info">More Information</div></td><td class="sport_pic"><img src="images/intro.jpg"></td></tr></table><div class="popup"><div class="popup-content"><div class="close"><i class="fa-solid fa-x"></i></div><h2 class="group_name">' + all_groups[i].name + '</h2><p class="group_sport"><strong>Sport:</strong> ' + all_groups[i].sport + '</p><p class="about_group">' + all_groups[i].about + '</p><p class="group_university"><strong>University:</strong> ' + all_groups[i].university + '</p><p class="meeting_location"><strong>Location:</strong> ' + all_groups[i].location + '</p><p class="meeting_times"><strong>Time:</strong> '
             for (var j = 0; j < all_groups[i].days.length; j++) {
                 if (all_groups[i].days[j] != '-1') {
                     total_str += all_groups[i].days[j] + ' ' + day_map[j] + ', ';
