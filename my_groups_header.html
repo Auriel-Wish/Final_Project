@@ -199,14 +199,25 @@
                 font-size: 30px;
                 border: 3px solid var(--orange1);
             }
-
+            .group_links a{
+                display: inline-block;
+                text-align: center;
+            }
+            #createG {
+                margin-left: 50px;
+            }
             a:hover {
                 color: var(--orange2);
                 border-color: var(--orange2);
             }
-            @media only screen and (max-width: 800px) {
-                .group_links {
-                        padding: 30px;                         
+            @media only screen and (max-width: 700px) {
+                .group_links a{
+                        display: block !important;
+                        margin: auto !important;
+                        margin-bottom: 25px !important;
+                        padding: 10px;
+                        width: 50%;
+                        font-size: 15px;                      
                 }
                 .popup-content{
                         width: max-content;
@@ -216,6 +227,38 @@
                 }
                 .leave_group {
                         font-size: 17px;
+                }
+                .group {
+                        width: 70% !important;
+                        padding-bottom: 25px;
+                }
+                .group td {
+                        border-radius: 10px;
+                        display: block;
+                        margin: auto;
+                }
+                .group img {
+                        border-radius: 10px !important;
+                }
+                .sport_description {
+                        font-size: 25px;
+                }
+                .sport_pic {
+                        border-radius: 15px !important;
+                        /* padding-bottom: 25px; */
+                }
+                .more_info {
+                        font-size: 15px;
+                        padding: 15px;
+                        margin-top: -10px;
+                        margin-bottom: 20px;
+                }
+                .group_sport {
+                        font-size: 15px !important;
+                }
+                .about_group {
+                        font-size: 15px;
+                        margin-top: 10px;
                 }
                 
             }

@@ -282,7 +282,7 @@ http.createServer(async function (req, res) {
         var user_id = path_name.split('_')[2];
         var mongo_id = new mongo.ObjectID(user_id);
 
-        res.write('<div class="group_links" style="text-align: center;"><div class="group_links" style="display: inline-block;"><a href="./user_' + user_id + '">Find More Groups</a></div><div class="group_links" style="margin-left: 50px; display: inline-block"><a href="./create_group_' + user_id + '">Create Group</a></div></div>');
+        res.write('<div class="group_links" style="text-align: center;"><div class="group_links"><a href="./user_' + user_id + '">Find More Groups</a></div><div class="group_links"><a id="createG" href="./create_group_' + user_id + '">Create Group</a></div></div>');
 
         await client.connect();
         var dbo = client.db('pickup_sports');
@@ -344,6 +344,7 @@ http.createServer(async function (req, res) {
             
             res.write(total_str);
         }
+
         file = fs.readFileSync('./my_groups_footer.html');
         res.write(file);
         res.write('</body></html>');

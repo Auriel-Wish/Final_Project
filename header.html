@@ -86,7 +86,7 @@
                 #intro h2, td {
                         font-size: 30px;
                         margin-top: 15px;
-                        margin-bottom: 75px;
+                        margin-bottom: 50px;
                 }
                 #intro h3, td {
                         font-size: 20px;
@@ -95,7 +95,6 @@
             @media only screen and (max-width: 600px) {
                 #intro h1, td {
                         font-size: 60px;
-                        margin: 0 10px;
                 }
                 #intro h2, td {
                         margin-top: 20px;
@@ -103,13 +102,20 @@
                 #intro h3, td {
                         margin-top: 30px;
                 }
+                #button_home a{
+                        font-size: 20px !important;
+                        display:block;
+                        width: 40%;
+                        margin: auto;
+                        margin-bottom: 30px; 
+                }
             }
         </style>
     </head>
     <body>
         <table id="intro" cellpadding="0" cellspacing="0">
             <tr style="height: 60%" style="width: 80%"><td><h1 style="text-transform: uppercase;">College Ball</h1><br><h2>Pickup Sports Made Easy</h2><h3>Available in: NJ, NY, CT, MA</h3><hr style="border: 1px solid white; margin: 30px auto 0 auto; width: 30%; background-color: white;"></td></tr>
-            <tr style="height: 40%"><td><a href="./sign-up">Sign Up</a><a href="./login">Log In</a></td></tr>
+            <tr style="height: 40%"><td id="button_home"><a href="./sign-up">Sign Up</a><a href="./login">Log In</a></td></tr>
         </table>
     </body>
 </html>
